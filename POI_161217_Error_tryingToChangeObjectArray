@@ -1,0 +1,239 @@
+package com.mycompany.app;
+
+import java.io.File;
+import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+//import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+//import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+//import org.apache.poi.hssf.util.CellReference;
+//import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		
+	
+		private static String result(Cell f) throws IOException {
+			
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			Row row = rowIterator.next();
+					
+            if ( row.getRowNum() == 0 ) { // starts iterating at row #
+            	
+				if (f.getCellType() == HSSFCell.CELL_TYPE_STRING) 
+				{
+					return "Neg";
+				} 
+				else if (f.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+				{
+					if (f.getNumericCellValue() > 52) 
+						return "104K";
+				}
+				else
+				{
+					return "-";
+				}
+            }
+			return "return statement";
+	    }
+
+/*		   private static String output() throws IOException {
+			   
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+			
+			while ( rowIterator.hasNext() ) {
+
+				Row row = rowIterator.next();
+				Cell a = row.getCell(0);
+				Cell b = row.getCell(1);
+				//Cell c = row.getCell(2);
+				//Cell d = row.getCell(3);
+				Cell e = row.getCell(4);
+				Cell f = row.getCell(5);
+				
+				//System.out.println(a + " " + b + " " + c + " " + d + " " + e + " " + f);
+				
+	            String dfA = dataFormatter.formatCellValue(a); // returns the formatted value of a cell as a String regardless of the cell type.
+	            String dfB = dataFormatter.formatCellValue(b);
+	            //String dfC = dataFormatter.formatCellValue(c);
+	            //String dfD = dataFormatter.formatCellValue(d);
+	            //String dfE = dataFormatter.formatCellValue(e);
+	            //String dfF = dataFormatter.formatCellValue(f);
+	            
+/*				if ( dfA.equals("A01") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f));
+				}	
+				if ( dfA.equals("B01") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f) );
+				}
+				if ( dfA.equals("E03") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f) );
+				}
+//
+				if ( dfA.equals("A01") && dfB.equals("Cy5") ) {
+					return(a + " " + b + " " + e + " " + result(f));
+				}	
+				if ( dfA.equals("B01") && dfB.equals("Cy5") ) {
+					return(a + " " + b + " " + e + " " + result(f) );
+				}
+				if ( dfA.equals("E03") && dfB.equals("Cy5") ) {
+					return(a + " " + b + " " + e + " " + result(f) );
+				}
+			}
+			return "something";
+		}
+*/		   
+/*		   // Cell a, Cell b, Cell e, String result
+		   public static void writeToFile() throws IOException {
+				
+				String excelFileName = "/home/nat/x1/src/main/java/com/mycompany/app/output.xls";//name of excel file
+				String sheetName = "Output";
+				HSSFWorkbook wb = new HSSFWorkbook();
+				HSSFSheet sheet = wb.createSheet(sheetName) ;
+
+				//iterating r number of rows
+				for (int r=0;r < 4; r++ ) {
+					HSSFRow row = sheet.createRow(r);
+			
+						//iterating c number of columns
+					for (int c=0;c < 5; c++ ) {
+						HSSFCell cell = row.createCell(c);
+						cell.setCellValue("Cell "+r+" "+c);
+						//cell.setCellValue(output());
+					}
+				}
+				
+				FileOutputStream fileOut = new FileOutputStream(excelFileName);
+				wb.write(fileOut);
+				fileOut.flush();
+				fileOut.close();
+		}
+*/					
+		   
+/*		public static void writeToFile() throws IOException {
+			   
+		}
+*/		   
+		public static void main(String[] args) throws IOException {
+			
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+			
+			while ( rowIterator.hasNext() ) {
+
+				Row row = rowIterator.next();
+				Cell a = row.getCell(0);
+				Cell b = row.getCell(1);
+				//Cell c = row.getCell(2);
+				//Cell d = row.getCell(3);
+				Cell e = row.getCell(4);
+				Cell f = row.getCell(5);
+								
+	            String dfA = dataFormatter.formatCellValue(a);
+	            String dfB = dataFormatter.formatCellValue(b);
+	            String dfE = dataFormatter.formatCellValue(e);
+// error
+	            String [] first = {"a","b","c","d"}; 
+				if ( dfA.equals("A01") && dfB.equals("Cy5") ) {
+					first = new String [] {dfA, dfB, dfE, result(f)}; 
+					//new String [] because Array constants can only be used in initializers
+				}	
+// /error
+				if ( dfA.equals("B01") && dfB.equals("Cy5") ) {
+					String second = (a + " " + b + " " + e + " " + result(f) );
+				}
+				if ( dfA.equals("E03") && dfB.equals("Cy5") ) {
+					String third = (a + " " + b + " " + e + " " + result(f) );
+				}				
+			
+			try {
+	            String excelPath = "/home/nat/x1/src/main/java/com/mycompany/app/output.xls";
+	            FileOutputStream fileOutputStream = new FileOutputStream(new File(excelPath));
+	            HSSFWorkbook workbook = new HSSFWorkbook();
+	            HSSFSheet sheet1 = workbook.createSheet("Output");
+
+// error
+	            Object[][] dataOutput = {
+	                    {"Well","Sample","Cy5 (104K)","HEX (104E)","TXR (240K)","FAM (240E)"},
+	                    {first[0], first[1], first[2], first[3]},
+	                    {"Rooney","England"},
+	                    {"Roben","Netherland"},
+	                    {"Messi","Argentina"}
+	            };
+	            
+	            int rownum = 0;
+	            
+	            for(Object[] player : dataOutput)
+	            {
+	                Row row1 = sheet1.createRow(rownum++);
+	                
+	                int colnum = 0;
+	                for(Object value : player)
+	                {
+	                    Cell  cell = row1.createCell(colnum++);
+	                    if (value instanceof String) {
+	                        cell.setCellValue((String) value);
+	                    } else if (value instanceof Integer) {
+	                        cell.setCellValue((Integer) value);
+	                    }
+	                }
+	            }
+	            //Write workbook into the excel
+	            workbook.write(fileOutputStream);
+	            //Close the workbook
+	            //workbook.close();
+
+	        } catch (IOException ie)
+	        {
+	            ie.printStackTrace();
+	        }
+	    }
+			
+			
+} 
+			
+}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//System.out.println("WELL " + "SAMPLE " + "Cy5(104K)");
+    		//output();
+    		//writeToFile();
+		
+    
+

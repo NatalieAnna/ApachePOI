@@ -1,0 +1,193 @@
+/*
+ * To fix:
+ * 	!!! Move each fluor into separate class
+ * 	Writes only final row of data to excel
+ * 	Conditional statement returns "return statement"
+ * 	Need ifs for other fluors
+ */
+
+package com.mycompany.app;
+
+import java.io.File;
+import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+//import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+//import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+//import org.apache.poi.hssf.util.CellReference;
+//import org.apache.poi.ss.usermodel.*;
+
+public class App {
+		
+// Cy5
+		private static String resultCy5(String a, String b, String e, Cell f) throws IOException {
+			
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			Row row = rowIterator.next();
+					
+	        if ( row.getRowNum() == 0 ) { // starts iterating at row #
+	        	
+				if ( (a.equals("A01")) && (b.equals("Cy5")) && (f.getCellType() == HSSFCell.CELL_TYPE_STRING)) 
+				{
+					return "--> " + a + " " + b + " " + e + " Neg";
+				} 
+				else if ( (a.equals("A01")) && (b.equals("Cy5")) && (f.getCellType() == HSSFCell.CELL_TYPE_NUMERIC))
+				{
+					if (f.getNumericCellValue() > 52) 
+						return "--> " + a + " " + b + " " + e + " 104K";
+				}
+				else
+				{
+					return "-";
+				}	
+	        }
+			return "return statement";
+	    }
+		
+		// turns result into String post if statement
+		public static String resultLinkCy5(String a, String b, String e, Cell f) throws IOException {	
+			String finalResult = resultCy5(a,b,e,f);					
+			return finalResult;
+		}
+		
+		// turns String into String[]
+		public static String[] ifMethodCy5(String a, String b, String e, Cell f) throws IOException {	
+				String[] stringArray = new String[] {a, b, e, resultLinkCy5(a,b,e,f)};	
+				return stringArray;	
+		}
+		
+// HEX
+		private static String resultHex(String a, String b, String e, Cell f) throws IOException {
+			
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			Row row = rowIterator.next();
+					
+	        if ( row.getRowNum() == 0 ) { // starts iterating at row #
+	        	
+				if ( (a.equals("A01")) && (b.equals("HEX")) && (f.getCellType() == HSSFCell.CELL_TYPE_STRING)) 
+				{
+					return "--> " + a + " " + b + " " + e + " NegHex";
+				} 
+				else if ( (a.equals("A01")) && (b.equals("HEX")) && (f.getCellType() == HSSFCell.CELL_TYPE_NUMERIC))
+				{
+					if (f.getNumericCellValue() > 52) 
+						return "--> " + a + " " + b + " " + e + " 104KHEX";
+				}
+				else
+				{
+					return "-";
+				}	
+	        }
+			return "return statement";
+	    }
+		
+		// turns result into String post if statement
+		public static String resultLinkHex(String a, String b, String e, Cell f) throws IOException {	
+			String finalResult = resultHex(a,b,e,f);					
+			return finalResult;
+		}
+		
+		// turns String into String[]
+		public static String[] ifMethodHex(String a, String b, String e, Cell f) throws IOException {	
+				String[] stringArray = new String[] {a, b, e, resultLinkHex(a,b,e,f)};	
+				return stringArray;	
+		}
+
+     //////////////////////////////// MAIN METHOD ////////////////////////////////////////////////////	
+		
+		
+		public static String toString(String[] name) {
+			return name[0] + name[1] + name[2];					
+		}
+		
+		public static void main(String[] args) throws IOException {
+			
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+			
+			while ( rowIterator.hasNext() ) {
+
+				Row row = rowIterator.next();
+				Cell a = row.getCell(0);
+				Cell b = row.getCell(1);
+				Cell e = row.getCell(4);
+				Cell f = row.getCell(5);
+								
+	            String dfA = dataFormatter.formatCellValue(a); 
+	            String dfB = dataFormatter.formatCellValue(b);
+	            String dfE = dataFormatter.formatCellValue(e);
+	
+	            // Cy5
+	            String[] ifStringArrayCy5 = ifMethodCy5(dfA, dfB, dfE, f);     
+	            
+	            System.out.println(Arrays.toString(ifStringArrayCy5)); // terminal print
+		
+	            // HEX
+	            String[] ifStringArrayHex = ifMethodHex(dfA, dfB, dfE, f);     
+	            System.out.println(Arrays.toString(ifStringArrayHex)); // terminal print
+			
+			try {
+	            String excelPath = "/home/nat/x1/src/main/java/com/mycompany/app/output.xls";
+	            FileOutputStream fileOutputStream = new FileOutputStream(new File(excelPath));
+	            HSSFWorkbook workbook = new HSSFWorkbook();
+	            HSSFSheet sheet1 = workbook.createSheet("Output");
+
+	            Object[][] dataOutput = {
+	                    {"Well","Sample","Cy5 (104K)","HEX (104E)","TXR (240K)","FAM (240E)"},
+	                    {ifStringArrayCy5[0], ifStringArrayCy5[1], ifStringArrayCy5[2], ifStringArrayCy5[3]}, // Cy5 [LINK] // Cy5
+	                    {ifStringArrayHex[0], ifStringArrayHex[1], ifStringArrayHex[2], ifStringArrayHex[3]}, // HEX
+	                    {"Roben","Netherland"},
+	                    {"Messi","Argentina"}
+	            };
+	            
+	            int rownum = 0;
+	            
+	            for(Object[] fluor : dataOutput)
+	            {
+	                Row row1 = sheet1.createRow(rownum++);
+	                
+	                int colnum = 0;
+	                for(Object value : fluor)
+	                {
+	                    Cell  cell = row1.createCell(colnum++);
+	                    if (value instanceof String) {
+	                        cell.setCellValue((String) value);
+	                    } else if (value instanceof Integer) {
+	                        cell.setCellValue((Integer) value);
+	                    }
+	                }
+	            }
+	            workbook.write(fileOutputStream);  // Write workbook into excel
+	           // workbook.close(); // Close workbook
+
+	        } catch (IOException ie)
+	        {
+	            ie.printStackTrace();
+	        }
+			}
+			
+	    }
+}
+    
+

@@ -1,0 +1,101 @@
+// 5.12.17 to update: skip first row (prevent printed "Well Sample Melt Temp")
+// FileOutputStream to export data to new spreadsheet
+// note: must be .xls
+
+package com.mycompany.app;
+
+import java.io.File;
+import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+// import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+//import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+//import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+//import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		public static void output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+		   // HSSFSheet sheet1 = wb.getSheetAt(0);
+   		   // DataFormatter dataFormatter = new DataFormatter();
+
+   		    Cy5("B5");
+   		    Cy5result("F5");
+		            
+			ExcelFileToRead.close();
+			FileOutputStream out = new FileOutputStream(new File("/home/nat/x1/src/main/java/com/mycompany/app/output.xls"));
+			wb.write(out);
+			out.close();
+		}
+		
+		public static void Cy5(String cr) throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+		    HSSFSheet sheet1 = wb.getSheetAt(0);
+   		    DataFormatter dataFormatter = new DataFormatter();
+		
+		            // Example: Cy5 via Excel reference
+		            CellReference ref = new CellReference(cr);
+		            Row r = sheet1.getRow(ref.getRow());
+		            if (r != null) {
+		               Cell c = r.getCell(ref.getCol());
+		               
+		            // conditional IF String
+		            String dfC = dataFormatter.formatCellValue(c);
+		            if ( dfC.equals("Cy5") )  System.out.println("Cy5? " + c + " > Yes!");
+		            else System.out.println("Not Cy5!");
+		            }
+		}
+
+		public static void Cy5result(String cr) throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+		    HSSFSheet sheet1 = wb.getSheetAt(0);
+		    
+		            // Example: MeltTemp via Excel reference
+		            CellReference ref1 = new CellReference(cr);
+		            Row r1 = sheet1.getRow(ref1.getRow());
+		            if (r1 != null) {
+		               Cell c1 = r1.getCell(ref1.getCol());
+		              
+						if (c1.getCellType() == HSSFCell.CELL_TYPE_STRING) 
+						{
+							System.out.print("Neg ");
+							//System.out.print(c1.getStringCellValue()+" ");
+						} 
+						else if (c1.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+						{
+							System.out.print(c1.getNumericCellValue()+" ");
+						}
+						else
+						{
+							System.out.print(" - ");
+						}
+						
+		            // conditional IF number
+//		            double dfC1 = c1.getNumericCellValue();
+//		            if ( dfC1 < 52 ) System.out.println(c1 + " < 52? > Yes!");
+//		            else System.out.println("Not < 52.");
+		            }
+		}
+
+		
+		public static void main(String[] args) throws IOException {
+			System.out.println("WELL " + "SAMPLE " + "Cy5 (104K)");
+			output();
+		}
+
+}

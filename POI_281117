@@ -1,0 +1,109 @@
+package com.mycompany.app;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+
+public class App {
+
+	public static void readXLSFile() throws IOException
+	{
+		InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+
+		HSSFSheet sheet=wb.getSheetAt(0);
+		HSSFRow row; 
+		HSSFCell cell;
+
+		Iterator rows = sheet.rowIterator();
+
+		while (rows.hasNext())
+		{
+			row=(HSSFRow) rows.next();
+			Iterator cells = row.cellIterator();
+			
+			while (cells.hasNext())
+			{
+				cell=(HSSFCell) cells.next();
+		
+				if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING)
+				{
+					System.out.print(cell.getStringCellValue()+" ");
+				}
+				else if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+				{
+					System.out.print(cell.getNumericCellValue()+" ");
+				}
+				else
+				{
+					System.out.print("- ");
+				}
+			}
+			System.out.println();
+		}
+        System.out.println();
+	}
+	
+	public static void evaluate() throws IOException
+	{
+		InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+
+		HSSFSheet sheet=wb.getSheetAt(0);
+//		HSSFRow row; 
+//		HSSFCell cell;
+		Iterator<Row> rowIterator = sheet.iterator();
+		DataFormatter dataFormatter = new DataFormatter();
+	
+		while (rowIterator.hasNext()) {
+
+            Row row1 = rowIterator.next();
+            Row row2 = rowIterator.next();
+
+            Cell a = row1.getCell(0); // type is Cell
+            Cell b = row1.getCell(1);
+            Cell c = row1.getCell(2);
+			Cell d = row2.getCell(0);
+            Cell e = row2.getCell(1);
+            Cell f = row2.getCell(2);
+            
+            System.out.println("The result is: " + a + " " + b + " " + c);
+            
+            // Formatted values (Cell to String)
+            String dfA = dataFormatter.formatCellValue(a); // returns the formatted value of a cell as a String regardless of the cell type.
+            String dfB = dataFormatter.formatCellValue(b);
+            String dfC = dataFormatter.formatCellValue(c);
+            String dfD = dataFormatter.formatCellValue(d);
+            String dfE = dataFormatter.formatCellValue(e);
+            String dfF = dataFormatter.formatCellValue(f);
+
+            System.out.println("The formatted value is: " + dfA + " " + dfB + " " + dfC + " " + dfD + " " + dfE + " " + dfF);
+			
+            // failing
+            if (dfA == "Well") {
+            	System.out.println("This is the Well.");
+            }
+			}
+	
+	}
+	
+	
+public static void main(String[] args) throws IOException {
+		
+		readXLSFile();
+
+		// evaluate
+		evaluate();
+		
+	}
+
+}

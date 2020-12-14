@@ -1,0 +1,175 @@
+package com.mycompany.app;
+
+import java.io.File;
+import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+//import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+//import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.sl.usermodel.Sheet;
+
+public class App {
+	
+		
+	
+		private static String result(Cell f) throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+			HSSFSheet sheet = wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			Row row = rowIterator.next();
+					
+            if ( row.getRowNum() == 0 ) { // starts iterating at row #
+            	
+				if (f.getCellType() == HSSFCell.CELL_TYPE_STRING) 
+				{
+					return "Neg";
+				} 
+				else if (f.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+				{
+					if (f.getNumericCellValue() > 52) 
+						return "104K";
+				}
+				else
+				{
+					return "-";
+				}
+            }
+			return "return statement";
+	    }
+
+		   private static String output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+			
+			while ( rowIterator.hasNext() ) {
+
+				Row row = rowIterator.next();
+				Cell a = row.getCell(0);
+				Cell b = row.getCell(1);
+				//Cell c = row.getCell(2);
+				//Cell d = row.getCell(3);
+				Cell e = row.getCell(4);
+				Cell f = row.getCell(5);
+				
+				//System.out.println(a + " " + b + " " + c + " " + d + " " + e + " " + f);
+				
+	            String dfA = dataFormatter.formatCellValue(a); // returns the formatted value of a cell as a String regardless of the cell type.
+	            String dfB = dataFormatter.formatCellValue(b);
+	            //String dfC = dataFormatter.formatCellValue(c);
+	            //String dfD = dataFormatter.formatCellValue(d);
+	            //String dfE = dataFormatter.formatCellValue(e);
+	            //String dfF = dataFormatter.formatCellValue(f);
+	            
+				if ( dfA.equals("A01") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f));
+				}	
+				if ( dfA.equals("B01") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f) );
+				}
+				if ( dfA.equals("E03") && dfB.equals("Cy5") ) {
+					System.out.println(a + " " + b + " " + e + " " + result(f) );
+				}
+			}
+			return "something";
+		}
+		   
+		   public static void writeXLSFile() throws IOException {
+				
+				String excelFileName = "/home/nat/x1/src/main/java/com/mycompany/app/output.xls";//name of excel file
+
+				String sheetName = "Output";//name of sheet
+
+				HSSFWorkbook wb = new HSSFWorkbook();
+				HSSFSheet sheet = wb.createSheet(sheetName) ;
+
+				//iterating r number of rows
+				for (int r=0;r < 4; r++ )
+				{
+					HSSFRow row = sheet.createRow(r);
+			
+					//iterating c number of columns
+					for (int c=0;c < 5; c++ )
+					{
+						HSSFCell cell = row.createCell(c);
+						//cell.setCellValue("Cell "+r+" "+c);
+						cell.setCellValue(output());
+
+					}
+				}
+				
+				FileOutputStream fileOut = new FileOutputStream(excelFileName);
+				
+				//write this workbook to an Outputstream.
+				wb.write(fileOut);
+				fileOut.flush();
+				fileOut.close();
+		}
+					
+		public static void main(String[] args) throws IOException {
+/*			HSSFWorkbook wb = new HSSFWorkbook();
+	        HSSFSheet sheet = wb.createSheet("Output");
+	        HSSFRow row = sheet.createRow(0);
+	        
+	        for(int RowNum=0; RowNum<50;RowNum++){
+	            HSSFRow row = sheet.createRow(RowNum);
+	            for(int ColNum=0; ColNum<50;ColNum++){
+	                HSSFCell cell = row.createCell(ColNum);
+	                cell.setCellValue(ArrayList[RowNum][ColNum]);
+	             }
+	         }
+	        
+	        HSSFWorkbook wb = new HSSFWorkbook();
+	        CreationHelper createHelper = wb.getCreationHelper();
+	        HSSFSheet sheet = wb.createSheet("Output");
+
+	        // Create a row and put some cells in it. Rows are 0 based.
+	        Row row = sheet.createRow((short)0);
+	        // Create a cell and put a value in it.
+	       row.createCell(0).setCellValue(1);
+	        row.createCell(1).setCellValue(1.2);
+	        row.createCell(2).setCellValue(
+	             createHelper.createRichTextString("This is a string"));
+	        row.createCell(3).setCellValue(true);
+
+	        // Write the output to a file
+	        FileOutputStream fileOut = new FileOutputStream("/home/nat/x1/src/main/java/com/mycompany/app/output.xls");
+	        wb.write(fileOut);
+	        fileOut.close();
+	        
+	        */
+			
+			
+			System.out.println("WELL " + "SAMPLE " + "Cy5(104K)");
+    		output();
+    		writeXLSFile();
+  /*  		
+	    try {
+	        FileOutputStream out = new FileOutputStream(new File("/home/nat/x1/src/main/java/com/mycompany/app/output.xls"));
+	        wb.write(out);
+	        out.flush();
+	        out.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	*/
+		}
+}	    
+

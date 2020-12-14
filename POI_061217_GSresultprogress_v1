@@ -1,0 +1,132 @@
+// 5.12.17 to update: skip first row (prevent printed "Well Sample Melt Temp")
+// FileOutputStream to export data to new spreadsheet
+// note: must be .xls
+
+package com.mycompany.app;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+// import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		public static void output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			do {
+				Row row = rowIterator.next();
+				
+				// raw data
+				Cell GSwell = row.getCell(0);
+				Cell GSfluor = row.getCell(1);
+				Cell GSsample = row.getCell(4);
+				Cell GSresult = row.getCell(5);
+				// error
+				// Exception in thread "main" java.lang.IllegalStateException: Cannot get a NUMERIC value from a STRING cell
+				// double GSresult = row.getCell(5).getNumericCellValue();
+
+					//double dfGStemp = ((HSSFCell) GStemp).getNumericCellValue();
+
+				// formatted data
+	            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+	            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+	            String dfGSsample = dataFormatter.formatCellValue(GSsample);
+	            //String strGSresult = formatStr(GSresult);  
+	            //double intGSresult = formatInt(GSresult); 
+
+				FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
+	            if (GSresult != null) {
+			        switch(formulaEvaluator.evaluateInCell(GSresult).getCellType())
+			        {
+			        case HSSFCell.CELL_TYPE_NUMERIC:
+			        	System.out.print(GSresult.getNumericCellValue() + "\t");
+			            break;
+			        case HSSFCell.CELL_TYPE_STRING:
+			        	GSresult.setCellValue(0);
+			            break;
+			        default:
+			            break;
+			        }
+	        
+			
+	            
+	            // if statements
+		//		if ( (dfGSfluor.equals("Cy5")) &&  (strGSresult.equals("None"))) { 		//  || dfGstempString.equals("None"))
+	      //      	System.out.println(dfGSwell + " " + dfGSsample + " Neg");
+				}
+				
+	/*			// error
+				// Exception in thread "main" java.lang.Error: Unresolved compilation problem: 
+				// Cannot invoke equals(String) on the primitive type int
+				// try convertUtils()
+				if ( (dfGSfluor.equals("Cy5")) && (formulaEvalString(GSresult).equals("None"))) { 		//  || dfGstempString.equals("None"))
+	            	System.out.println(dfGSwell + " " + dfGSsample + " None");
+				}
+	            else if ( (dfGSfluor.equals("Cy5")) && (formulaEvalNumeric()) > 10)) { 		//  || dfGstempString.equals("None"))
+	            	System.out.println(dfGSwell + " " + dfGSsample + " 104K");
+				}
+	*/
+			}
+				while (rowIterator.hasNext());
+			}
+/*
+		public static int formulaEvalNumeric(Cell cell) throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			Row row = rowIterator.next();
+			Cell GSresult = row.getCell(5);
+			
+			if (GSresult != null) {
+		        switch(formulaEvaluator.evaluateInCell(GSresult).getCellType())
+		        {
+		        case HSSFCell.CELL_TYPE_NUMERIC:
+		        	System.out.print(GSresult.getNumericCellValue() + "\t");
+		            break;
+		        case HSSFCell.CELL_TYPE_STRING:
+		            System.out.print(GSresult.getStringCellValue() + "\t");
+		            break;
+		        default:
+		            break;
+		        }
+        }
+			return 0;
+        }
+*/        
+		// formatNone()
+/*		public static String formatStr(Cell cell) {
+			if (cell.equals("None")) {
+				return "None";
+			}
+			return "returningSomething";
+		}
+*/
+		
+
+		
+public static void main(String[] args) throws IOException {
+		System.out.println("WELL " + "SAMPLE " + "Cy5 (104K)");
+		output();
+	
+	}
+
+}

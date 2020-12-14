@@ -1,0 +1,58 @@
+package com.mycompany.app;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		public static void output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			do {
+				Row row = rowIterator.next();
+				Cell GSwell = row.getCell(0);
+				Cell GSfluor = row.getCell(1);
+				Cell GSsample = row.getCell(4);
+				Cell GStemp = row.getCell(5);
+	            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+	            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+	           // int dfGSsample = ((HSSFCell) value).getNumericCellValue(GSsample);
+	            // double dfGStemp = ((HSSFCell) value).getNumericCellValue(GStemp);
+	            
+	            System.out.println(" * WELL: " + dfGSwell);
+	            System.out.println(" * SAMPLE: " + GSsample);
+	            System.out.println(" * MELT TEMP: " + GStemp); // delete later
+	            
+				if ( (dfGSfluor.equals("Cy5"))) { 		
+	            	System.out.println("Yes");
+	            } else {
+	            	System.out.println("No");
+	            }
+				
+			}
+				while (rowIterator.hasNext());
+			
+			}
+
+public static void main(String[] args) throws IOException {
+		
+		output();
+	}
+
+}

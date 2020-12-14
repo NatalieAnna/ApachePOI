@@ -1,0 +1,76 @@
+// 5.12.17 to update: skip first row (prevent printed "Well Sample Melt Temp")
+// note: must be .xls
+
+package com.mycompany.app;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		public static void output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			do {
+				Row row = rowIterator.next();
+				Cell GSwell = row.getCell(0);
+				//Cell GSsample = row.getCell(4);
+				Cell GSfluor = row.getCell(1);
+				
+				// GStemp
+				Cell GStemp = row.getCell(5);
+				//Cell GStempString = row.getCell(5);
+	            //String dfGStempInt = dataFormatter.formatCellValue(GStempInt);
+				//double dfValue = dfGStempInt.getNumericCellValue();
+	            //String dfGStempString = dataFormatter.formatCellValue(GStemp);
+				
+	            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+	            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+	            
+	            // Melt temp variable PROBLEM
+	            //double dfGStemp = ((HSSFCell) GStemp).getNumericCellValue();
+	            
+	            // if statements
+				if ( (dfGSfluor.equals("Cy5")) && (GStemp.equals("None"))) { 		//  || dfGstempString.equals("None"))
+	            	System.out.println(dfGSwell + " Cy5 (104K) something");
+	            } else {
+	            	System.out.println("Neg");
+	            }
+				
+			}
+				while (rowIterator.hasNext());
+			
+			}
+		
+		// formatNone()
+		public static int formatNone() {
+			if (GStemp.equals("None")) {
+				return 0;
+			} else {
+				return GStemp;
+			}
+		}
+
+		
+public static void main(String[] args) throws IOException {
+		System.out.println("WELL " + "SAMPLE " + "MELT TEMP");
+		output();
+	}
+
+}

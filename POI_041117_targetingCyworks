@@ -1,0 +1,227 @@
+package com.mycompany.app;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.*;
+
+public class App {
+
+//	private static final String A2 = null;	// is this relevant?
+
+
+	// this method ignores empty cells in print output
+/*	public static void readXLSFile() throws IOException {
+		InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+
+		HSSFSheet sheet=wb.getSheetAt(0);
+		HSSFRow row; 
+		HSSFCell cell;
+
+		Iterator rows = sheet.rowIterator();
+
+		while (rows.hasNext())
+		{
+			row=(HSSFRow) rows.next();
+			Iterator cells = row.cellIterator();
+			
+			while (cells.hasNext())
+			{
+				cell=(HSSFCell) cells.next();
+		
+				if (cell.getCellType() == HSSFCell.CELL_TYPE_STRING)
+				{
+					System.out.print(cell.getStringCellValue()+" ");
+				}
+				else if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+				{
+					System.out.print(cell.getNumericCellValue()+" ");
+				}
+				else
+				{
+					System.out.print("- ");
+				}
+			}
+			System.out.println();
+		}
+        System.out.println();
+	}
+*/	
+	// this method prints "null" for empty cells until formatted to String then prints a space (i think)
+/*	public static void evaluate() throws IOException {
+		InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead); // creates new workbook object using an (input stream)
+
+		HSSFSheet sheet=wb.getSheetAt(0);
+		Iterator<Row> rowIterator = sheet.iterator();
+		DataFormatter dataFormatter = new DataFormatter();
+	
+		while (rowIterator.hasNext()) {
+
+            Row row1 = rowIterator.next(); // jumps to next row
+            Row row2 = rowIterator.next();
+            Row row3 = rowIterator.next(); // requires or else can't read remaining rows
+
+            Cell a = row1.getCell(0); // type is Cell.
+            Cell b = row1.getCell(1); // jumps to next column in same row
+            Cell c = row1.getCell(2);
+			Cell d = row2.getCell(0);
+            Cell e = row2.getCell(1);
+            Cell f = row2.getCell(2);
+            
+            System.out.println("The result is: " + a + " " + b + " " + c + " " + d + " " + e + " " + f);
+            
+            // Formatted values (Cell to String)
+            String dfA = dataFormatter.formatCellValue(a); // returns the formatted value of a cell as a String regardless of the cell type.
+            String dfB = dataFormatter.formatCellValue(b);
+            String dfC = dataFormatter.formatCellValue(c);
+            String dfD = dataFormatter.formatCellValue(d);
+            String dfE = dataFormatter.formatCellValue(e);
+            String dfF = dataFormatter.formatCellValue(f);
+
+            System.out.println("The formatted (String) value is: " + dfA + " " + dfB + " " + dfC + " " + dfD + " " + dfE + " " + dfF);
+			
+		}
+	}
+*/
+		// this method evaluates If statements down first column (all cells)
+/*		public static void IFs()  throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		
+			do {
+				// first set
+				Row row = rowIterator.next();	// not row1 ??
+				Cell a = row.getCell(0);
+	            String dfA = dataFormatter.formatCellValue(a);
+	
+	            System.out.println("This is A?: " + dfA);
+	            
+				if ( dfA.equals("A") ) {
+	            	System.out.println("Yes");
+	            } else {
+	            	System.out.println("No");
+	            }
+				
+			}
+				while (rowIterator.hasNext());
+			
+			}
+*/
+/*	
+		public static void cellRef()  throws IOException {
+
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter formatter = new DataFormatter();
+		    
+		    Sheet sheet1 = wb.getSheetAt(0);
+		    for (Row row : sheet1) {
+		        for (Cell cell : row) {
+		        	CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+	            
+		            System.out.print("This: " + cellRef.formatAsString());
+		            System.out.print(" - ");
+
+		            // get the text that appears in the cell by getting the cell value and applying any data formats (Date, 0.00, 1.23e9, $1.23, etc)
+		            String text = formatter.formatCellValue(cell);
+		            System.out.println(text);
+
+		            if ( text.equals("B")) {
+		            	System.out.println("Yes");
+		            } else {
+		            	System.out.println("No");
+		            }
+		        }
+		    }
+		}
+*/		
+		
+		// this targets specific cells!!!!!!!!!!!!!!!
+/*		public static void target() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			do {
+				// first set
+				Row row = rowIterator.next();	// not row1 ??
+				Cell name = row.getCell(0);
+				Cell value = row.getCell(1);
+	            String dfName = dataFormatter.formatCellValue(name);
+	            double dfValue = ((HSSFCell) value).getNumericCellValue();
+	            
+	            System.out.println(" * This is name: " + dfName);
+	            System.out.println(" * This is value: " + value);
+	            
+				if ( (dfName.equals("A")) && (dfValue > 5) ) { 		
+	            	System.out.println("Yes");
+	            } else {
+	            	System.out.println("No");
+	            }
+				
+			}
+				while (rowIterator.hasNext());
+			
+			}
+*/
+	
+		// this targets specific cells!!!!!!!!!!!!!!! v2
+		public static void targetCy5() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			do {
+				// first set
+				Row row = rowIterator.next();
+				Cell name = row.getCell(0);
+				Cell value = row.getCell(1);
+	            String dfName = dataFormatter.formatCellValue(name);
+	            double dfValue = ((HSSFCell) value).getNumericCellValue();
+	            
+	            System.out.println(" * Target: " + dfName);
+	            System.out.println(" * Value: " + value);
+	            
+				if ( (dfName.equals("Cy")) && (dfValue > 5) ) { 		
+	            	System.out.println("Yes");
+	            } else {
+	            	System.out.println("No");
+	            }
+				
+			}
+				while (rowIterator.hasNext());
+			
+			}
+
+public static void main(String[] args) throws IOException {
+		
+//		readXLSFile();
+//		evaluate();
+//		IFs();
+//		cellRef();
+//		target();
+		targetCy5();
+	}
+
+}

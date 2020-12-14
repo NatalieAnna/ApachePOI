@@ -1,0 +1,160 @@
+// 5.12.17 to update: skip first row (prevent printed "Well Sample Melt Temp")
+// FileOutputStream to export data to new spreadsheet
+// note: must be .xls
+
+package com.mycompany.app;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+// import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.*;
+
+public class App {
+	
+		public static void output() throws IOException {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+
+			while (rowIterator.hasNext()) {
+			      Row row = rowIterator.next();
+			      Iterator <Cell> cellIterator = row.cellIterator();
+			      while (cellIterator.hasNext()) {
+			        Cell cell = cellIterator.next();
+			        
+			        // manipulation
+			        
+			     // raw data
+					Cell GSwell = row.getCell(0);
+					Cell GSfluor = row.getCell(1);
+					Cell GSsample = row.getCell(4);
+
+					// formatted data
+		            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+		            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+		            String dfGSsample = dataFormatter.formatCellValue(GSsample);
+
+		            System.out.print(dfGSwell + " " + dfGSfluor + " " + dfGSsample + " ");	
+			        
+			        // \
+			        
+			        //System.out.print(cell.getStringCellValue() + "\t\t");
+			      }
+			    }
+				ExcelFileToRead.close();
+			    FileOutputStream out =
+			      new FileOutputStream(new File("/home/nat/x1/src/main/java/com/mycompany/app/output.xls"));
+			    wb.write(out);
+			    out.close();
+
+		}
+		
+/*		 
+			do {
+				Row row = rowIterator.next();				
+				// raw data
+				Cell GSwell = row.getCell(0);
+				Cell GSfluor = row.getCell(1);
+				Cell GSsample = row.getCell(4);
+
+				// formatted data
+	            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+	            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+	            String dfGSsample = dataFormatter.formatCellValue(GSsample);
+
+	            //System.out.print(dfGSwell + " " + dfGSfluor + " " + dfGSsample + " ");	
+				
+	            target();
+
+			}
+			while (rowIterator.hasNext());
+			return -1.0;	
+		}
+		
+		public static double target() throws IOException {
+			//InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			//HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			//HSSFSheet sheet=wb.getSheetAt(0);
+			//Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+		 
+			//do {
+			//	Row row = rowIterator.next();
+				
+				// raw data
+				Cell GSwell = row.getCell(0);
+				Cell GSfluor = row.getCell(1);
+				Cell GSsample = row.getCell(4);
+
+				// formatted data
+	            String dfGSwell = dataFormatter.formatCellValue(GSwell);
+	            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+	            String dfGSsample = dataFormatter.formatCellValue(GSsample);
+
+	            //System.out.print(dfGSwell + " " + dfGSfluor + " " + dfGSsample + " ");	
+				
+	            target();
+	            
+				if ( (resultEval() > 1.0) && (dfGSfluor == "Cy5") ) {
+					System.out.print(" yes ");
+					System.out.println();
+				}
+			}
+			while (rowIterator.hasNext());
+			return -1.0;	
+		}
+		
+
+		public static double resultEval() throws IOException {
+
+		// do {
+			InputStream ExcelFileToRead = new FileInputStream("/home/nat/x1/src/main/java/com/mycompany/app/data2.xls");
+			HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToRead);
+			HSSFSheet sheet=wb.getSheetAt(0);
+			Iterator<Row> rowIterator = sheet.iterator();
+			DataFormatter dataFormatter = new DataFormatter();
+			Row row = rowIterator.next();
+			FormulaEvaluator formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
+			Cell GSresult = row.getCell(5);
+
+			// Cy5
+			Cell GSfluor = row.getCell(1);
+            String dfGSfluor = dataFormatter.formatCellValue(GSfluor);
+        	
+		    switch(formulaEvaluator.evaluateInCell(GSresult).getCellType()) {
+		    	case HSSFCell.CELL_TYPE_NUMERIC:
+		    		return GSresult.getNumericCellValue();
+		        	 // if
+		        	// if (dfGSfluor.equals("Cy5") && GSresult.getNumericCellValue() > 1.0) 
+		        	//	 System.out.print(" " + GSresult.getNumericCellValue() + " ");
+		        case HSSFCell.CELL_TYPE_STRING:
+		        	 GSresult.setCellValue(0.0);
+		        	 return 0.0;
+		        	// if ( GSresult.getNumericCellValue() == 0.0) 
+		        		//System.out.print(" " + "Neg" + " ");
+		    }
+		    return -1.0;
+		}
+*/	
+		public static void main(String[] args) throws IOException {
+			System.out.println("WELL " + "SAMPLE " + "Cy5 (104K)");
+			output();
+		}
+
+}
